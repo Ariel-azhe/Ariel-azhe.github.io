@@ -25,7 +25,7 @@
   const THEMES = {
     paper:     { bg: '#e6e4ea', fg: '#141018', muted: '#56505f', accent: '#d02c44', tunnel: .85, c: 1, p: 0, h: 0, wob: .012, sc: 1 },
     about:     { bg: '#e6e4ea', fg: '#141018', muted: '#56505f', accent: '#d02c44', tunnel: .2,  c: 1, p: 0, h: 0, wob: .03, sc: 1 },
-    hoagie:    { bg: '#efe8dc', fg: '#1a120a', muted: '#5e5246', accent: '#c2500c', tunnel: .13, c: 1, p: 0, h: 0, wob: .02, sc: 1 },
+    hoagie:    { bg: '#eceef2', fg: '#141a26', muted: '#545c6b', accent: '#c8501a', tunnel: .1, c: 1, p: 0, h: 0, wob: .012, sc: 1 },
     seamless:  { bg: '#08060b', fg: '#f4f1f7', muted: '#cfc9d8', accent: '#ff5ec4', tunnel: .35, c: 0, p: 1, h: 0, wob: .02, sc: 1 },
     glitch:    { bg: '#050308', fg: '#f5effa', muted: '#b4adc2', accent: '#ea5dff', tunnel: .2,  c: 0, p: 1, h: 0, wob: .025, sc: 1 },
     hub:       { bg: '#e6e4ea', fg: '#141018', muted: '#56505f', accent: '#2a35d6', tunnel: .13, c: 0, p: 1, h: 0, wob: .012, sc: 1 },
@@ -436,64 +436,138 @@
     gwTrack.style.setProperty('--gs', reduced ? '0deg' : `${clamp(S.v * .05, -5, 5)}deg`);
   }
 
-  /* ---------- HoagiePlan: a tiny semester planner with live requirements ---------- */
+  /* ---------- HoagiePlan: a working miniature of the real planner ---------- */
   (() => {
-    const binsEl = $('#bins'), pool = $('#pool'), reqsEl = $('#reqs');
-    const courses = [
-      { id: 'COS 217', n: 'Programming Systems' },
-      { id: 'COS 226', n: 'Algorithms & Data Structures' },
-      { id: 'COS 240', n: 'Reasoning About Computation' },
-      { id: 'COS 333', n: 'Advanced Programming Techniques' },
-      { id: 'CWR 201', n: 'Creative Writing (Fiction)' },
+    const semsEl = $('#hp-sems'), resultsEl = $('#hp-results'), reqsEl = $('#hp-reqs'), q = $('#hp-q');
+    const catalog = {
+      'COS 217': 'Intro to Programming Systems', 'COS 240': 'Reasoning About Computation',
+      'COS 333': 'Advanced Programming Techniques', 'COS 316': 'Principles of Computer System Design',
+      'COS 324': 'Intro to Machine Learning', 'COS 397': 'Junior Independent Work',
+      'COS 426': 'Computer Graphics', 'COS 398': 'Junior Independent Work (Spring)',
+      'COS 445': 'Economics and Computation', 'COS 423': 'Theory of Algorithms',
+      'COS 318': 'Operating Systems', 'COS 435': 'Reinforcement Learning',
+      'CHI 451': 'Readings in Modern Chinese', 'CHI 418': 'Advanced Chinese', 'CHI 413': 'Chinese Film and Media',
+      'SML 201': 'Intro to Data Science', 'SML 301': 'Data Intelligence',
+      'ANT 344': 'Anthropology of Technology', 'SOC 228': 'Social Networks',
+      'CWR 205': 'Creative Writing (Fiction)', 'CWR 206': 'Creative Writing (Poetry)',
+      'MAT 202': 'Linear Algebra with Applications', 'EGR 154': 'Foundations of Engineering',
+    };
+    const sems = ['Fall 2025', 'Spring 2026', 'Fall 2026', 'Spring 2027'];
+    const plan = [
+      ['CHI 451', 'COS 217', 'SML 201', 'COS 240'],
+      ['ANT 344', 'SML 301', 'COS 333', 'SOC 228', 'CHI 418'],
+      ['COS 324', 'COS 316', 'CHI 413', 'CWR 205', 'COS 397'],
+      ['COS 426'],
     ];
     const reqs = [
-      { n: 'CS core', need: ['COS 217', 'COS 226', 'COS 240'] },
-      { n: 'CS departmental', need: ['COS 333'] },
-      { n: 'Creative Writing minor', need: ['CWR 201'] },
+      { n: 'Introductory', all: ['COS 217', 'COS 240'] },
+      { n: 'Systems', any: ['COS 316', 'COS 318', 'COS 333'] },
+      { n: 'Theory', any: ['COS 423', 'COS 445'] },
+      { n: 'Applications', any: ['COS 324', 'COS 426', 'COS 435'] },
+      { n: 'Independent Work', all: ['COS 397', 'COS 398'] },
     ];
-    const sems = ['Fall 2026', 'Spring 2027'];
-    const where = new Map([['COS 217', 0], ['COS 226', 0]]);
-    let active = 1;
+    const open = new Set();
+    let fresh = null;   // only the course just added animates in
+    const dept = (id) => id.slice(0, 3);
+    const placed = () => new Set(plan.flat());
     const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
-    function courseBtn(c, placed) {
-      const b = el('button', 'course' + (placed ? ' is-placed' : ''));
-      b.type = 'button';
-      b.append(el('b', null, c.id), el('span', null, c.n));
-      b.setAttribute('aria-label', placed ? `Remove ${c.id} from ${sems[where.get(c.id)]}` : `Add ${c.id} to ${sems[active]}`);
-      b.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        placed ? where.delete(c.id) : where.set(c.id, active);
-        ecg.kick();
-        render();
-      });
-      return b;
+    const check = (ok) => {
+      const i = el('span', 'hp-mark ' + (ok ? 'is-ok' : 'is-no'));
+      i.setAttribute('aria-hidden', 'true');
+      i.innerHTML = ok
+        ? '<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.2"/><path d="M6.3 10.2l2.4 2.4 5-5"/></svg>'
+        : '<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.2"/><path d="M7.2 7.2l5.6 5.6M12.8 7.2l-5.6 5.6"/></svg>';
+      return i;
+    };
+    function add(id, si) {
+      if (placed().has(id)) return;
+      plan[si].push(id);
+      fresh = id;
+      ecg.kick();
+      render();
+    }
+    function remove(id) {
+      plan.forEach((list) => { const k = list.indexOf(id); if (k >= 0) list.splice(k, 1); });
+      render();
+    }
+    function pill(id) {
+      const li = el('li', `hp-pill d-${dept(id)}` + (id === fresh ? ' is-new' : ''));
+      li.draggable = true;
+      li.title = catalog[id] || id;
+      li.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'move'; });
+      const x = el('button', 'hp-x', '×');
+      x.type = 'button';
+      x.setAttribute('aria-label', `Remove ${id}`);
+      x.addEventListener('click', (e) => { e.stopPropagation(); remove(id); });
+      li.append(el('span', 'hp-code', id), el('span', 'hp-grip', '⠿'), x);
+      return li;
     }
     function render() {
-      binsEl.replaceChildren(...sems.map((s, i) => {
-        const bin = el('div', 'bin' + (i === active ? ' is-on' : ''));
-        const head = el('button', 'bin-head', s);
-        head.type = 'button';
-        head.setAttribute('aria-pressed', i === active);
-        head.addEventListener('click', () => { active = i; render(); });
-        const list = el('ul', 'bin-list');
-        const inBin = courses.filter((c) => where.get(c.id) === i);
-        if (!inBin.length) list.append(el('li', 'bin-empty', 'Empty'));
-        inBin.forEach((c) => { const li = el('li'); li.append(courseBtn(c, true)); list.append(li); });
-        bin.append(head, list);
-        return bin;
+      const have = placed();
+      semsEl.replaceChildren(...sems.map((name, si) => {
+        const card = el('div', 'hp-sem');
+        card.append(el('h4', null, name));
+        const list = el('ul', 'hp-grid');
+        plan[si].forEach((id) => list.append(pill(id)));
+        card.append(list);
+        card.addEventListener('dragover', (e) => { e.preventDefault(); card.classList.add('is-over'); });
+        card.addEventListener('dragleave', () => card.classList.remove('is-over'));
+        card.addEventListener('drop', (e) => {
+          e.preventDefault(); card.classList.remove('is-over');
+          const id = e.dataTransfer.getData('text/plain');
+          if (!catalog[id]) return;
+          plan.forEach((l) => { const k = l.indexOf(id); if (k >= 0) l.splice(k, 1); });
+          plan[si].push(id); fresh = id; ecg.kick(); render();
+        });
+        return card;
       }));
-      const left = courses.filter((c) => !where.has(c.id));
-      pool.replaceChildren(...left.map((c) => { const li = el('li'); li.append(courseBtn(c, false)); return li; }));
-      if (!left.length) pool.append(el('li', 'bin-empty', 'Everything is planned.'));
-      reqsEl.replaceChildren(...reqs.map((r) => {
-        const have = r.need.filter((id) => where.has(id)).length;
-        const done = have === r.need.length;
-        const li = el('li', 'req' + (done ? ' is-done' : ''));
-        const bar = el('i'); bar.style.setProperty('--f', have / r.need.length);
-        li.append(el('span', 'req-n', r.n), el('span', 'req-c', done ? '✓' : `${have}/${r.need.length}`), bar);
+
+      const term = q.value.trim().toLowerCase().replace(/\s+/g, ' ');
+      const hits = Object.keys(catalog).filter((id) => !have.has(id)
+        && (!term || id.toLowerCase().includes(term) || id.toLowerCase().replace(' ', '').includes(term) || catalog[id].toLowerCase().includes(term)));
+      resultsEl.replaceChildren(...hits.map((id) => {
+        const li = el('li');
+        const b = el('button', `hp-result d-${dept(id)}`);
+        b.type = 'button'; b.draggable = true;
+        b.setAttribute('aria-label', `Add ${id}, ${catalog[id]}, to ${sems[sems.length - 1]}`);
+        b.append(el('b', null, id), el('span', null, catalog[id]));
+        b.addEventListener('click', () => add(id, sems.length - 1));
+        b.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'copy'; });
+        li.append(b);
         return li;
       }));
+      if (!hits.length) resultsEl.append(el('li', 'hp-none', 'No courses found.'));
+
+      const rows = reqs.map((r) => {
+        const list = r.all || r.any;
+        const got = list.filter((id) => have.has(id));
+        const ok = r.all ? got.length === list.length : got.length > 0;
+        return { r, list, got, ok };
+      });
+      const done = rows.filter((x) => x.ok).length;
+      const head = el('li', 'hp-req hp-req-top');
+      head.append(el('span', 'hp-req-n', 'Degree Progress'));
+      const score = el('span', 'hp-score ' + (done === rows.length ? 'is-ok' : 'is-no'), `${done}/${rows.length}`);
+      head.append(score, check(done === rows.length));
+      const items = rows.map(({ r, list, got, ok }) => {
+        const li = el('li', 'hp-req' + (open.has(r.n) ? ' is-open' : ''));
+        const btn = el('button', 'hp-req-btn');
+        btn.type = 'button';
+        btn.setAttribute('aria-expanded', open.has(r.n));
+        btn.append(el('span', 'hp-req-n', r.n), check(ok), el('span', 'hp-chev', '⌄'));
+        btn.addEventListener('click', () => { open.has(r.n) ? open.delete(r.n) : open.add(r.n); render(); });
+        li.append(btn);
+        if (open.has(r.n)) {
+          const d = el('p', 'hp-req-d');
+          d.textContent = (r.all ? 'All of: ' : 'One of: ') + list.map((id) => (got.includes(id) ? `${id} ✓` : id)).join(', ');
+          li.append(d);
+        }
+        return li;
+      });
+      reqsEl.replaceChildren(head, ...items);
+      fresh = null;
     }
+    q.addEventListener('input', render);
     render();
   })();
 
@@ -554,7 +628,7 @@
   const revealIO = new IntersectionObserver((es) => es.forEach((e) => {
     if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); }
   }), { rootMargin: '0px 0px -8% 0px' });
-  $$('.hub-copy, .sketch, .rows li, .skills, .shot').forEach((el) => { el.classList.add('reveal'); revealIO.observe(el); });
+  $$('.hub-copy, .sketch, .hp, .rows li, .skills, .shot').forEach((el) => { el.classList.add('reveal'); revealIO.observe(el); });
 
   /* ---------- Input ---------- */
   addEventListener('pointermove', (e) => {
