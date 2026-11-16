@@ -12,8 +12,8 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23e8525f' d='M16 28S3 20 3 11a7 7 0 0 1 13-3.6A7 7 0 0 1 29 11c0 9-13 17-13 17z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=4">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -89,32 +89,9 @@
         <a class="button" href="https://plan.hoagie.io" target="_blank" rel="noopener">Open HoagiePlan <span aria-hidden="true">↗</span></a>
       </div>
 
-      <div class="hp" id="hp">
-        <p class="hp-note">Try it: search for a course and click it (or drag it) into a semester. Click × to remove one.</p>
-        <div class="hp-window">
-          <div class="hp-strip" aria-hidden="true"></div>
-          <div class="hp-top">
-            <span class="hp-logo">hoagie<span>plan</span></span>
-            <nav class="hp-nav" aria-hidden="true"><span>About</span><span class="is-on">Graduation Requirements</span><span>Course Planner</span><span>Contact</span></nav>
-            <span class="hp-avatar" aria-hidden="true">AY</span>
-          </div>
-          <div class="hp-body">
-            <aside class="hp-side">
-              <div class="hp-search">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-                <label class="sr" for="hp-q">Search courses</label>
-                <input id="hp-q" type="search" placeholder="Search courses" autocomplete="off">
-              </div>
-              <ul class="hp-results" id="hp-results"></ul>
-            </aside>
-            <div class="hp-sems" id="hp-sems"></div>
-            <aside class="hp-reqs">
-              <div class="hp-tabs" aria-hidden="true"><span>BSE</span><span class="is-on">COS-BSE</span></div>
-              <ul id="hp-reqs" aria-live="polite"></ul>
-            </aside>
-          </div>
-        </div>
-      </div>
+      <figure class="hp-shot">
+        <img loading="lazy" decoding="async" width="2000" height="951" src="assets/hoagieplan.webp" alt="HoagiePlan's Graduation Requirements page: courses laid out by semester from Fall 2024 to Spring 2028 as colored pills, with a requirements panel showing degree progress, mathematics, science, writing seminar and distribution checks.">
+      </figure>
     </section>
 
     <section class="seamless" id="seamless" data-theme="seamless" aria-label="Seamless, an anxiety rhythm game">
@@ -192,6 +169,6 @@
   </video>
 </dialog>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=4"></script>
 </body>
 </html>
