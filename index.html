@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ariel Yuan</title>
+<meta name="description" content="Ariel Yuan: aspiring product manager and game designer. Princeton CS, co-founder of Whim Studio, making interactive things people stay inside of.">
+<meta name="theme-color" content="#e6e4ea">
+<meta property="og:title" content="Ariel Yuan">
+<meta property="og:description" content="Product, games and interactive design.">
+<meta property="og:image" content="assets/seamless/f030.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23e8525f' d='M16 28S3 20 3 11a7 7 0 0 1 13-3.6A7 7 0 0 1 29 11c0 9-13 17-13 17z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Geist+Mono:wght@400;500&family=Geist:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#about">Skip to content</a>
+<canvas id="tunnel" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a href="#top" class="nav-name">Ariel Yuan</a>
+  <nav aria-label="Main">
+    <a href="#work">Work</a>
+    <a href="#elsewhere">About</a>
+    <a href="assets/Ariel-Yuan-Resume.pdf">Résumé</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<div class="pulse" aria-hidden="true">
+  <canvas id="ecg" width="280" height="64"></canvas>
+  <span id="bpm">64</span><small>bpm</small>
+</div>
+
+<main id="top">
+
+  <section class="hero" id="hero" data-theme="paper">
+    <div class="hero-stage">
+      <p class="eyebrow hero-top">Product <i>/</i> Games <i>/</i> Interactive design</p>
+      <h1 class="hero-name" aria-label="Ariel Yuan">
+        <span class="hero-line" id="line-a" data-fluid aria-hidden="true">Ariel</span>
+        <span class="hero-line" id="line-b" data-fluid aria-hidden="true">Yuan</span>
+      </h1>
+      <div class="hero-foot">
+        <p class="hero-lede">Future product manager, longtime game maker. I build interactive things, and the teams and plans that get them shipped.</p>
+        <p class="eyebrow scroll-cue">Scroll to go deeper <span aria-hidden="true">↓</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="about" data-theme="about">
+    <p class="statement" id="statement">I co-founded a game studio in high school and took our game past a million in popularity. Now I study computer science and creative writing at Princeton, and I'm still asking the same question: what does this actually feel like to use?</p>
+  </section>
+
+  <div id="work">
+
+    <section class="hub hoagie" id="hoagie" data-theme="hoagie">
+      <div class="hub-copy">
+        <p class="eyebrow"><span class="num">01</span> Hoagie Club <i>/</i> Princeton <i>/</i> Sept 2026 – now</p>
+        <h2 class="title" data-fluid>HoagiePlan</h2>
+        <p class="role">Programmer</p>
+        <p class="body">An open-source academic planner for Princeton students: lay out courses semester by semester and see which major, minor and certificate requirements they fill. I'm one of 15+ developers maintaining it, taking features and fixes from Linear through a large shared codebase.</p>
+        <ul class="tags"><li>Course search</li><li>Semester bins</li><li>Requirement tracking</li></ul>
+        <a class="button hoagie-link" href="https://plan.hoagie.io" target="_blank" rel="noopener">Open HoagiePlan <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="sketch planner" id="planner">
+        <p class="sketch-note">Try it. Pick a semester, then click courses to plan them. A sketch, not the real app.</p>
+        <div class="bins" id="bins" role="group" aria-label="Semesters"></div>
+        <p class="pool-label">Courses</p>
+        <ul class="pool" id="pool"></ul>
+        <ul class="reqs" id="reqs" aria-live="polite"></ul>
+      </div>
+    </section>
+
+    <section class="seamless" id="seamless" data-theme="seamless" aria-label="Seamless, an anxiety rhythm game">
+      <div class="scrub-stage">
+        <canvas id="scrub" role="img" aria-label="Footage of Seamless that advances as you scroll: hand-drawn title screen, two-thumb gameplay in a colored tunnel, a failure screen, and a final score."></canvas>
+        <div class="scrub-head">
+          <p class="eyebrow"><span class="num">02</span> Mobile rhythm game</p>
+          <h2 class="scrub-title">Seamless</h2>
+          <p class="scrub-role">Product manager, sound designer</p>
+        </div>
+        <div class="captions" id="captions">
+          <p data-from="0" data-to="35"><b>start</b> An anxiety rhythm game, drawn by hand.</p>
+          <p data-from="36" data-to="65"><b>play</b> A heart at the end of the tunnel, and a heartbeat running behind the lanes.</p>
+          <p data-from="66" data-to="85"><b>flow</b> Two thumbs. The colors keep changing under them.</p>
+          <p data-from="86" data-to="99"><b>failure</b> Losing gets its own world, with retry waiting at the bottom.</p>
+          <p data-from="100" data-to="111"><b>score</b> Okay, bad, miss. Even the score stays in character.</p>
+        </div>
+        <button class="watch" id="watch" type="button"><span aria-hidden="true">▶</span> Watch with sound</button>
+        <div class="scrub-bar" aria-hidden="true"><i id="scrub-bar"></i></div>
+      </div>
+    </section>
+
+    <section class="glitch" id="glitchwave" data-theme="glitch">
+      <div class="gw-stage">
+        <div class="gw-track" id="gw-track">
+          <div class="gw-intro">
+            <p class="eyebrow"><span class="num">03</span> National High School Game Academy <i>/</i> 2023</p>
+            <h2 class="title gw-title" data-fluid>GlitchWave</h2>
+            <p class="role">Producer, sound designer</p>
+            <p class="body">You're a programmer debugging your code by literally killing the bugs. It's a remake of the arcade classic Tempest with one addition: a stomp that clears enemies from neighboring lanes on the rim. I produced the five-person team and made the sound.</p>
+            <div class="gw-actions">
+              <a class="button" href="https://novigradian7.itch.io/glitchwave" target="_blank" rel="noopener">Play in your browser <span aria-hidden="true">↗</span></a>
+              <p class="keys"><kbd>A</kbd><kbd>D</kbd> move <kbd>Q</kbd> shoot <kbd>E</kbd> stomp</p>
+            </div>
+            <p class="credits">With Lucas Wang and Tony Ma (programming), Dakota Lee and Anthony Qi (art). Made in Unity.</p>
+          </div>
+          <figure class="shot"><img loading="lazy" decoding="async" width="3072" height="1536" src="https://img.itch.zone/aW1hZ2UvMjE4MzM4OS8xMjg5Mjk1OC5wbmc=/original/L7IoBB.png" alt="GlitchWave: a magenta wireframe tunnel with green insect enemies climbing toward the rim."></figure>
+          <figure class="shot"><img loading="lazy" decoding="async" width="3072" height="1544" src="https://img.itch.zone/aW1hZ2UvMjE4MzM4OS8xMjg5Mjk2MC5wbmc=/original/Suynwq.png" alt="GlitchWave: an orange tunnel crowded with enemies, purple sparks at its center."></figure>
+          <figure class="shot"><img loading="lazy" decoding="async" width="3072" height="1530" src="https://img.itch.zone/aW1hZ2UvMjE4MzM4OS8xMjg5Mjk2My5wbmc=/original/Ri2rie.png" alt="GlitchWave: Level Complete in magenta over an orange tunnel, with a teal explosion."></figure>
+          <figure class="shot"><img loading="lazy" decoding="async" width="1972" height="1164" src="https://img.itch.zone/aW1hZ2UvMjE4MzM4OS8xMjg5Mjk2Ni5wbmc=/original/9OrWk1.png" alt="GlitchWave: a wide, winged magenta level seen from above."></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="hub" id="hub" data-theme="hub">
+      <div class="hub-copy">
+        <p class="eyebrow"><span class="num">04</span> Princeton <i>/</i> Feb 2026 – now</p>
+        <h2 class="title" data-fluid>Graduate Student Hub</h2>
+        <p class="role">Product manager, UI designer, full-stack developer</p>
+        <p class="body">A platform that helps Princeton graduate students, organizations and administrators discover and manage campus events. I led product development and partnered with the Graduate Student Government, turning their feedback into features, then designed, built and shipped them.</p>
+        <ul class="tags"><li>Filters</li><li>Search</li><li>Favorites</li><li>Org management</li></ul>
+      </div>
+      <div class="sketch" id="sketch">
+        <p class="sketch-note">Try it. A sketch of the core flow, with made-up events.</p>
+        <label class="sr" for="sketch-q">Search sample events</label>
+        <input id="sketch-q" type="search" placeholder="Search events" autocomplete="off">
+        <div class="chips" role="group" aria-label="Filter sample events">
+          <button type="button" class="chip is-on" data-f="all" aria-pressed="true">All</button>
+          <button type="button" class="chip" data-f="social" aria-pressed="false">Social</button>
+          <button type="button" class="chip" data-f="academic" aria-pressed="false">Academic</button>
+          <button type="button" class="chip" data-f="saved" aria-pressed="false">Saved <span id="saved-n">0</span></button>
+        </div>
+        <ul class="events" id="events"></ul>
+        <p class="empty" id="empty" hidden>Nothing here yet. Try another filter.</p>
+      </div>
+    </section>
+  </div>
+
+  <section class="elsewhere" id="elsewhere" data-theme="elsewhere">
+    <p class="eyebrow">Also</p>
+    <h2 class="title" data-fluid>Around the work</h2>
+    <ul class="rows">
+      <li><span class="when">2026 – now</span><h3>FemaleFounded Conference</h3><p class="what">Assistant Director of Founder Relations. Recruited and selected emerging ventures, and shaped programming around what founders needed.</p></li>
+      <li><span class="when">2025 – 26</span><h3>Business Today Design Nation Conference</h3><p class="what">Assistant Director of Student Relations. Recruited 100+ attendees nationwide, then designed and launched the Personal Showcase, where attendees got feedback from industry executives.</p></li>
+      <li><span class="when">Summer 2025</span><h3>iSoftStone</h3><p class="what">Intern in Shenzhen. Researched multi-agent generative AI architectures, and built activity-tracking and display features for a Tian Ji RTOS smartwatch in a large C codebase.</p></li>
+      <li><span class="when">Summer 2023</span><h3>National High School Game Academy, Carnegie Mellon</h3><p class="what">Full-ride scholarship student. Produced two five-person Agile teams and shipped two PC and mobile games, contributing Unity programming and sound design.</p></li>
+      <li><span class="when">Class of 2028</span><h3>Princeton University</h3><p class="what">BSE in Computer Science, intended minor in Creative Writing.</p></li>
+    </ul>
+    <p class="skills"><span>Java</span><span>C</span><span>C#</span><span>Python</span><span>JavaScript</span><span>HTML</span><span>CSS</span><span>Flask</span><span>PostgreSQL</span><span>Unity</span><span>Photoshop</span><span>Reaper</span></p>
+  </section>
+
+  <section class="contact" id="contact" data-theme="contact">
+    <p class="eyebrow">End of the tunnel</p>
+    <h2 class="contact-big" data-fluid>Say hi.</h2>
+    <ul class="contact-links">
+      <li><a href="mailto:ay3052@princeton.edu">ay3052@princeton.edu</a></li>
+      <li><a href="https://www.linkedin.com/in/ariel-yuan-1591a723b/" target="_blank" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>
+      <li><a href="assets/Ariel-Yuan-Resume.pdf">Résumé <span aria-hidden="true">↗</span></a></li>
+    </ul>
+    <p class="colophon">Built by hand in HTML, CSS and JavaScript. No database. Click anywhere to send a pulse down the tunnel.</p>
+  </section>
+</main>
+
+<dialog id="player" aria-label="Seamless gameplay video">
+  <button type="button" id="player-close" class="player-close">Close</button>
+  <video id="player-video" controls playsinline preload="none" poster="assets/seamless/f030.jpg">
+    <source src="assets/seamless.mp4" type="video/mp4">
+  </video>
+</dialog>
+
+<script src="js/main.js"></script>
+</body>
+</html>
